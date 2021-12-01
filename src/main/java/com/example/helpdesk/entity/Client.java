@@ -7,13 +7,14 @@ import javax.persistence.*;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientSequence")
+    @SequenceGenerator(name="clientSequence", sequenceName="client_sequence", allocationSize = 1)
     private int id;
-    @Column(name = "prefix")
+    @Column(name = "prefix", nullable = false, unique = true)
     private int prefix;
-    @Column(name = "short_name")
+    @Column(name = "short_name", nullable = false, length = 16, unique = true)
     private String shortName;
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     public int getId() {

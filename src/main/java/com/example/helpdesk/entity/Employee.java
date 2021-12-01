@@ -7,13 +7,14 @@ import javax.persistence.*;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeSequence")
+    @SequenceGenerator(name = "employeeSequence", sequenceName = "employee_sequence", allocationSize = 1)
     private int id;
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false, length = 32)
     private String firstName;
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false, length = 64)
     private String lastName;
-    @Column(name = "patronymic")
+    @Column(name = "patronymic", length = 64)
     private String patronymic;
 
     public int getId() {

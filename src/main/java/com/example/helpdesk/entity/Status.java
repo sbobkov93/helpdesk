@@ -7,9 +7,10 @@ import javax.persistence.*;
 public class Status {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "statusSequence")
+    @SequenceGenerator(name = "statusSequence", sequenceName = "status_sequence", allocationSize = 1)
     private int id;
-    @Column(name = "status")
+    @Column(name = "status", unique = true, nullable = false, length = 32)
     private String status;
 
     public int getId() {

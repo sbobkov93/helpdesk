@@ -8,25 +8,26 @@ import java.util.Date;
 public class Note {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "noteSequence")
+    @SequenceGenerator(name = "noteSequence", sequenceName = "note_sequence", allocationSize = 1)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "ticket_id")
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
-    @Column(name = "comment")
+    @Column(name = "comment", nullable = false, length = 1024)
     private String comment;
     @OneToOne
-    @JoinColumn(name = "creator_id")
+    @JoinColumn(name = "creator_id", nullable = false)
     private Employee creator;
     @OneToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private Employee owner;
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Date creationTime;
-    @Column(name = "last_modified")
+    @Column(name = "last_modified", nullable = false)
     private Date lastModifiedTime;
     @OneToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
     public int getId() {

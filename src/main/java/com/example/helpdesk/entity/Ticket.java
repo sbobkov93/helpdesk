@@ -1,6 +1,7 @@
 package com.example.helpdesk.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -9,29 +10,32 @@ import java.util.List;
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticketSequence")
+    @SequenceGenerator(name = "ticketSequence", sequenceName = "ticket_sequence", allocationSize = 1)
     private int id;
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "description")
+    @Column(name = "description", length = 1024)
     private String description;
     @OneToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
     @OneToOne
-    @JoinColumn(name = "creator_id")
+    @JoinColumn(name = "creator_id", nullable = false)
     private Employee creator;
     @OneToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private Employee owner;
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
-    @Column(name = "last_modified")
+    @Column(name = "last_modified", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedDate;
     @OneToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private Status status;
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ticket")
     private List<Note> notes;
 
     public int getId() {
