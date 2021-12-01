@@ -15,8 +15,8 @@ public class Ticket {
     private String title;
     @Column(name = "description")
     private String description;
-    @Column(name = "client_id")
     @OneToOne
+    @JoinColumn(name = "client_id")
     private Client client;
     @OneToOne
     @JoinColumn(name = "creator_id")
