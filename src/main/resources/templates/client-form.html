@@ -1,9 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>client form page</title>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
 </head>
 <body>
-<h1>Create a Person:</h1>
 
 <!--
    In Thymeleaf the equivalent of
@@ -12,17 +12,21 @@
    -->
 
 <form th:action="@{/clients/form}"
-      th:object="${client}" method="POST">
-    Prefix:
-    <input type="text" th:field="*{prefix}" />
-    <br/>
-    Short name:
-    <input type="text" th:field="*{shortName}" />
-    <br/>
-    Full name:
-    <input type="text" th:field="*{name}" />
-    <br/>
-    <input type="submit" value="Create" />
+      th:object="${client}" method="POST" style="margin-left: 20px">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="mb-3">
+    <label for="prefix" class="form-label">Префикс клиента</label>
+    <input type="text" th:field="*{prefix}" class="form-control" id="prefix" style="width: 80px" maxlength="5"/>
+    </div>
+    <div class="mb-3">
+        <label for="short-name" class="form-label">Краткое наименование</label>
+    <input type="text" th:field="*{shortName}" class="form-control" id="short-name" style="width: 200px;" maxlength="16"/>
+    </div>
+    <div class="mb-3">
+        <label for="full-name" class="form-label">Полное наименование</label>
+        <input type="text" th:field="*{name}" class="form-control" id="full-name" style="width: 600px"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
 
 <br/>
@@ -33,6 +37,5 @@
 <!--     style="color:red;font-style:italic;">-->
 <!--    ...-->
 <!--</div>-->
-Client form
 </body>
 </html>

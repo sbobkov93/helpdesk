@@ -9,27 +9,27 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientSequence")
     @SequenceGenerator(name="clientSequence", sequenceName="client_sequence", allocationSize = 1)
-    private int id;
+    private Integer id;
     @Column(name = "prefix", nullable = false, unique = true)
-    private int prefix;
+    private Integer prefix;
     @Column(name = "short_name", nullable = false, length = 16, unique = true)
     private String shortName;
     @Column(name = "name", nullable = false)
     private String name;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getPrefix() {
+    public Integer getPrefix() {
         return prefix;
     }
 
-    public void setPrefix(int prefix) {
+    public void setPrefix(Integer prefix) {
         this.prefix = prefix;
     }
 

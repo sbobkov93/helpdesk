@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>employee form page</title>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<form th:action="@{/employees/create}"
+      th:object="${employee}" method="POST" style="margin-left: 20px">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="mb-3">
+    <label for="prefix" class="form-label">Имя</label>
+    <input type="text" th:field="*{firstName}" class="form-control" id="prefix" style="width: 200px" maxlength="32"/>
+    </div>
+    <div class="mb-3">
+        <label for="short-name" class="form-label">Фамилия</label>
+    <input type="text" th:field="*{lastName}" class="form-control" id="short-name" style="width: 300px;" maxlength="32"/>
+    </div>
+    <div class="mb-3">
+        <label for="full-name" class="form-label">Отчество</label>
+        <input type="text" th:field="*{patronymic}" class="form-control" id="full-name" style="width: 400px"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+</body>
+</html>

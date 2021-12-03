@@ -14,4 +14,6 @@ public interface ClientService {
 
     void save (Client client);
 
+    void delete (Integer clientId);
+
 }

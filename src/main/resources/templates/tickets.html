@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <title>hello page</title>
+</head>
+<body style="margin-right: auto; margin-left: auto;">
+<div>
+    <table class="table table-striped table-hover table-bordered" style="text-align: center; margin: 20px; width: 97%">
+        <tr class="table-primary ">
+            <th>Id</th>
+            <th>Тикет</th>
+            <th>Клиент</th>
+            <th>Владелец</th>
+            <th>Статус</th>
+        </tr>
+        <tr th:each ="ticket : ${tickets}">
+            <td th:utext="${ticket.id}">...</td>
+            <td th:utext="${ticket.title}">...</td>
+            <td th:utext="${ticket.client}">...</td>
+            <td th:utext="${ticket.owner}">...</td>
+            <td th:utext="${ticket.status}">...</td>
+            <td><a th:href="@{/tickets/(ticketId=${ticket.id})}" class="btn btn-outline-info">Редактировать</a></td>
+        </tr>
+    </table>
+    <a th:href="@{/tickets/create}" class="btn btn-primary" style="margin: 20px">Добавить</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>employee form page</title>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+<form th:action="@{/tickets/create}"
+      th:object="${ticket}" method="POST" style="margin-left: 20px">
+    <input type="hidden" th:field="*{id}"/>
+    <div class="mb-3">
+    <label for="title" class="form-label">Тема</label>
+    <input type="text" th:field="*{title}" class="form-control" id="title" style="width: 200px" maxlength="32"/>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Описание</label>
+    <input type="text" th:field="*{description}" class="form-control" id="description" style="width: 300px;" maxlength="32"/>
+    </div>
+    <div class="mb-3">
+        <label for="status" class="form-label">Статус</label>
+        <input type="text" th:field="*{status}" class="form-control" id="status" style="width: 400px"/>
+    </div>
+    <div class="mb-3">
+        <label for="client" class="form-label">Клиент</label>
+        <select th:field="*{client}" id="client" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width: auto">
+            <option th:each="client : ${clients}"
+                    th:value="${client}"
+                    th:utext="${client.shortName}"/>
+        </select>
+    </div>
+    <div class="mb-3">
+<!--        <label for="owner" class="form-label">Владелец</label>-->
+<!--        <input type="text" th:field="*{owner}" class="form-control" id="owner" style="width: 400px"/>-->
+    </div>
+<!--    <div class="mb-3">-->
+<!--        <label for="creator" class="form-label">Владелец</label>-->
+<!--        <input type="text" th:field="*{creator}" class="form-control" id="creator" style="width: 400px"/>-->
+<!--    </div>-->
+    <div class="mb-3">
+        <label for="owner" class="form-label">Владелец</label>
+    <select th:field="*{owner}" id="owner" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width: auto">
+        <option th:each="employee : ${employees}"
+                th:value="${employee}"
+                th:utext="${employee.firstName}"/>
+    </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+</body>
+</html>

@@ -36,9 +36,16 @@ public class ClientController {
         return "redirect:/clients";
     }
 
-//    @PostMapping("new")
-//    public String save(@RequestBody Client client){
-//
-//    }
+    @GetMapping("update")
+    public String showFormForUpdate(@RequestParam("clientId") int id, Model model){
+        model.addAttribute("client", clientService.getById(id));
+        return "client-form";
+    }
+
+    @GetMapping("delete")
+    public String deleteClient(@RequestParam("clientId") int id){
+        clientService.delete(id);
+        return "redirect:/clients";
+    }
 
 }
