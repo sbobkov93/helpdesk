@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>employee form page</title>
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
 <form th:action="@{/tickets/create}"
@@ -9,41 +9,44 @@
     <input type="hidden" th:field="*{id}"/>
     <div class="mb-3">
     <label for="title" class="form-label">Тема</label>
-    <input type="text" th:field="*{title}" class="form-control" id="title" style="width: 200px" maxlength="32"/>
+    <input type="text" th:field="*{title}" class="form-control" id="title" style="width: 600px" maxlength="32"/>
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Описание</label>
-    <input type="text" th:field="*{description}" class="form-control" id="description" style="width: 300px;" maxlength="32"/>
-    </div>
-    <div class="mb-3">
-        <label for="status" class="form-label">Статус</label>
-        <input type="text" th:field="*{status}" class="form-control" id="status" style="width: 400px"/>
+        <textarea class="form-control" id="description" th:field="*{description}" rows="6" style="width: 600px;"></textarea>
     </div>
     <div class="mb-3">
         <label for="client" class="form-label">Клиент</label>
-        <select th:field="*{client}" id="client" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width: auto">
+        <input class="form-control" list="client" style="width: auto">
+        <datalist th:field="*{client}" id="client">
             <option th:each="client : ${clients}"
-                    th:value="${client}"
-                    th:utext="${client.shortName}"/>
-        </select>
+                    th:value="${client}"/>
+        </datalist>
+
     </div>
-    <div class="mb-3">
+<!--    <div class="mb-3">-->
 <!--        <label for="owner" class="form-label">Владелец</label>-->
 <!--        <input type="text" th:field="*{owner}" class="form-control" id="owner" style="width: 400px"/>-->
-    </div>
+<!--    </div>-->
 <!--    <div class="mb-3">-->
 <!--        <label for="creator" class="form-label">Владелец</label>-->
 <!--        <input type="text" th:field="*{creator}" class="form-control" id="creator" style="width: 400px"/>-->
 <!--    </div>-->
     <div class="mb-3">
         <label for="owner" class="form-label">Владелец</label>
-    <select th:field="*{owner}" id="owner" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width: auto">
-        <option th:each="employee : ${employees}"
-                th:value="${employee}"
-                th:utext="${employee.firstName}"/>
-    </select>
+        <input class="form-control" list="owner" style="width: auto">
+        <datalist th:field="*{owner}" id="owner">
+            <option th:each="employee : ${employees}"
+                    th:value="${employee}"/>
+        </datalist>
     </div>
+    <div th:each="status : ${statuses}" style="display: inline-block">
+        <input type="radio" th:field="*{status}" th:value="${status.status}" th:id="${status.status}" class="btn-check">
+         <label class="btn btn-outline-secondary" th:for="${status.status}" th:text="${status.status}"></label>
+    </div>
+    <div style="margin-top: 10px">
     <button type="submit" class="btn btn-primary">Сохранить</button>
+    </div>
 </form>
 </body>
 </html>
