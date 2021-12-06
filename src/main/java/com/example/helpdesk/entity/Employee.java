@@ -17,6 +17,9 @@ public class Employee {
     @Column(name = "patronymic", length = 64)
     private String patronymic;
 
+    @Transient
+    private String fullName;
+
     public int getId() {
         return id;
     }
@@ -47,6 +50,12 @@ public class Employee {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
+    }
+
+    public String getFullName() {
+        if (fullName == null)
+            fullName = String.format("%s %s %s", lastName, firstName, patronymic);
+        return fullName;
     }
 
     @Override

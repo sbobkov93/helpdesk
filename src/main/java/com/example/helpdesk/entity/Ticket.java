@@ -1,7 +1,9 @@
 package com.example.helpdesk.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -31,8 +33,9 @@ public class Ticket {
     private Date creationTime;
     @Column(name = "last_modified", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-    @OneToOne
+    private Date lastModified;
+    @OneToOne(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
     @OneToMany(mappedBy = "ticket")
@@ -94,12 +97,12 @@ public class Ticket {
         this.creationTime = creationTime;
     }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
+    public Date getLastModified() {
+        return lastModified;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    public void setLastModified(Date lastModifiedDate) {
+        this.lastModified = lastModifiedDate;
     }
 
     public Status getStatus() {

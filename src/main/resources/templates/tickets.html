@@ -16,9 +16,9 @@
         <tr th:each ="ticket : ${tickets}">
             <td th:utext="${ticket.id}">...</td>
             <td th:utext="${ticket.title}">...</td>
-            <td th:utext="${ticket.client}">...</td>
-            <td th:utext="${ticket.owner}">...</td>
-            <td th:utext="${ticket.status}">...</td>
+            <td th:utext="${ticket.client.shortName}">...</td>
+            <td th:utext="${ticket.owner.fullName}">...</td>
+            <td th:utext="${ticket.status.status}">...</td>
             <td><a th:href="@{/tickets/(ticketId=${ticket.id})}" class="btn btn-outline-info">Редактировать</a></td>
         </tr>
     </table>
