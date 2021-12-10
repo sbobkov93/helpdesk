@@ -1,30 +1,24 @@
 package com.example.helpdesk.dto;
 
-import lombok.Data;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class TicketDTO {
 
     private Integer id;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Обязательное поле")
     private String title;
     private String description;
-    @NotNull
-    @Min(1)
     private Integer creator;
-    @NotNull
-    @Min(1)
+    @Min(value = 1, message = "Выберите владельца")
     private Integer owner;
     @NotNull
-    @Min(1)
+    @Min(value = 1, message = "Выберите клиента")
     private Integer client;
     @NotNull
     @Min(1)
-    private Integer status;
+    private Integer status = 1;
 
     public Integer getId() {
         return id;

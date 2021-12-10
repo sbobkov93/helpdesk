@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -41,7 +43,10 @@ public class EmployeeController {
 
     @GetMapping("update")
     public String showFormForUpdate(@RequestParam("employeeId") int id, Model model){
-        model.addAttribute("employee", employeeService.getById(id));
+        Optional<Employee> employee = employeeService.findById(id);
+        if (employee.isEmpty())
+            return "redirect:/employees";
+        model.addAttribute("employee", employee.get());
         return "employee-form";
     }
 

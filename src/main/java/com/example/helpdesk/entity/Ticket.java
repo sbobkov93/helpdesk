@@ -1,8 +1,5 @@
 package com.example.helpdesk.entity;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -19,13 +16,13 @@ public class Ticket {
     private String title;
     @Column(name = "description", length = 1024)
     private String description;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator_id", nullable = false)
     private Employee creator;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
     private Employee owner;
     @Column(name = "created_at", nullable = false)
@@ -35,10 +32,9 @@ public class Ticket {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModified;
     @OneToOne(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
-    @OneToMany(mappedBy = "ticket")
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.EAGER)
     private List<Note> notes;
 
     public int getId() {

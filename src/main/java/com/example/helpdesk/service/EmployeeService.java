@@ -3,12 +3,13 @@ package com.example.helpdesk.service;
 import com.example.helpdesk.entity.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
 
     List<Employee> findAll();
 
-    Employee getById(Integer employeeId);
+    Optional<Employee> findById(Integer employeeId);
 
     void save (Employee employee);
 

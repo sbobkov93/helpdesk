@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/tickets")
@@ -40,10 +42,10 @@ public class TicketController {
         this.modelMapper = modelMapper;
     }
 
-//    @InitBinder
-//    public void initBinder(WebDataBinder binder) {
-//        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-//    }
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     //FIXME hibernate generate multiple queries when list is not empty. Can't figure out why
     @GetMapping
@@ -69,26 +71,25 @@ public class TicketController {
             model.addAttribute("statuses", statusService.findAll());
             return "ticket-form";
         }
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        ticketDTO.setCreator(1);
+        ticketDTO.setCreator(1); //TODO
         Ticket ticket = modelMapper.map(ticketDTO, Ticket.class);
         ticketService.save(ticket);
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
         return "redirect:/tickets";
     }
 
-//
-//    @GetMapping("update")
-//    public String showFormForUpdate(@RequestParam("employeeId") int id, Model model){
-//        model.addAttribute("employee", employeeService.getById(id));
-//        return "employee-form";
-//    }
+
+    @GetMapping("update")
+    public String showFormForUpdate(@RequestParam("ticketId") int id, Model model){
+        Optional<Ticket> ticket = ticketService.findById(id);
+        if (ticket.isEmpty())
+            return "redirect:/tickets";
+        TicketDTO ticketDTO = modelMapper.map(ticket.get(), TicketDTO.class);
+        model.addAttribute("ticket", ticketDTO);
+        model.addAttribute("clients", clientService.findAll());
+        model.addAttribute("employees", employeeService.findAll());
+        model.addAttribute("statuses", statusService.findAll());
+        return "ticket-form";
+    }
 //
 //    @GetMapping("delete")
 //    public String deleteClient(@RequestParam("employeeId") int id){

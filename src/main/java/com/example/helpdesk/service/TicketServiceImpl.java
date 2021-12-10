@@ -3,9 +3,11 @@ package com.example.helpdesk.service;
 import com.example.helpdesk.entity.Ticket;
 import com.example.helpdesk.repository.TicketDao;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketServiceImpl implements TicketService{
@@ -22,8 +24,8 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public Ticket getById(Integer ticketId) {
-        return ticketDao.getById(ticketId);
+    public Optional<Ticket> findById(Integer ticketId) {
+        return ticketDao.findById(ticketId);
     }
 
     @Override

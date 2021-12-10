@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -23,8 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee getById(Integer employeeId) {
-        return employeeDao.getById(employeeId);
+    public Optional<Employee> findById(Integer employeeId) {
+        return employeeDao.findById(employeeId);
     }
 
     @Override
