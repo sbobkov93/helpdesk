@@ -16,6 +16,9 @@ public class Employee {
     private String lastName;
     @Column(name = "patronymic", length = 64)
     private String patronymic;
+    @OneToOne
+    @JoinColumn(name = "auth_id")
+    private AuthenticationData authenticationData;
 
     @Transient
     private String fullName;
@@ -56,6 +59,14 @@ public class Employee {
         if (fullName == null)
             fullName = String.format("%s %s %s", lastName, firstName, patronymic);
         return fullName;
+    }
+
+    public AuthenticationData getAuthenticationData() {
+        return authenticationData;
+    }
+
+    public void setAuthenticationData(AuthenticationData authenticationData) {
+        this.authenticationData = authenticationData;
     }
 
     @Override

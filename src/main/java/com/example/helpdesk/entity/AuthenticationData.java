@@ -18,8 +18,8 @@ public class AuthenticationData {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
     @OneToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     public Integer getId() {
         return id;
@@ -53,11 +53,11 @@ public class AuthenticationData {
         this.enabled = enabled;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Role getRole() {
+        return role;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

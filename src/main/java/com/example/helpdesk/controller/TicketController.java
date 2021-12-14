@@ -12,6 +12,7 @@ import com.example.helpdesk.service.TicketService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -79,10 +81,11 @@ public class TicketController {
 
 
     @GetMapping("update")
-    public String showFormForUpdate(@RequestParam("ticketId") int id, Model model){
+    public String showFormForUpdate(@RequestParam("ticketId") int id, Model model, Authentication authentication){
         Optional<Ticket> ticket = ticketService.findById(id);
         if (ticket.isEmpty())
             return "redirect:/tickets";
+
         TicketDTO ticketDTO = modelMapper.map(ticket.get(), TicketDTO.class);
         model.addAttribute("ticket", ticketDTO);
         model.addAttribute("clients", clientService.findAll());

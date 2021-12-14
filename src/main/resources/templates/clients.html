@@ -4,8 +4,10 @@
           rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <title>hello page</title>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body style="margin-right: auto; margin-left: auto;">
+<div th:insert="navbar :: navbar">  </div>
 <div>
     <table class="table table-striped table-hover table-bordered" style="text-align: center; margin: 20px; width: 97%">
         <tr class="table-primary ">
