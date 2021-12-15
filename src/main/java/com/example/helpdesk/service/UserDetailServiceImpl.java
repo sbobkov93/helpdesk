@@ -27,6 +27,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AuthenticationData data = repository.findAuthenticationDataByUserName(username);
+        if (data == null)
+            throw new UsernameNotFoundException(username);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(data.getRole().getRole().name()));
         return new User(data.getUserName(), data.getPassword(), authorities);

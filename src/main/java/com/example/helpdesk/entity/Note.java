@@ -11,7 +11,7 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "noteSequence")
     @SequenceGenerator(name = "noteSequence", sequenceName = "note_sequence", allocationSize = 1)
     private int id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
     @Column(name = "comment", nullable = false, length = 1024)

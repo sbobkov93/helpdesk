@@ -16,13 +16,13 @@ public class Ticket {
     private String title;
     @Column(name = "description", length = 1024)
     private String description;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne()
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne()
     @JoinColumn(name = "creator_id", nullable = false)
     private Employee creator;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne()
     @JoinColumn(name = "owner_id", nullable = false)
     private Employee owner;
     @Column(name = "created_at", nullable = false)

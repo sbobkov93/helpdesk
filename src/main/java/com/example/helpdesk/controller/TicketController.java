@@ -1,14 +1,8 @@
 package com.example.helpdesk.controller;
 
 import com.example.helpdesk.dto.TicketDTO;
-import com.example.helpdesk.entity.Client;
-import com.example.helpdesk.entity.Employee;
-import com.example.helpdesk.entity.Status;
-import com.example.helpdesk.entity.Ticket;
-import com.example.helpdesk.service.ClientService;
-import com.example.helpdesk.service.EmployeeService;
-import com.example.helpdesk.service.StatusService;
-import com.example.helpdesk.service.TicketService;
+import com.example.helpdesk.entity.*;
+import com.example.helpdesk.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -20,9 +14,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -34,14 +25,16 @@ public class TicketController {
     private EmployeeService employeeService;
     private StatusService statusService;
     private ModelMapper modelMapper;
+    private NoteService noteService;
 
     @Autowired
-    public TicketController(TicketService ticketService, ClientService clientService, EmployeeService employeeService, StatusService statusService, ModelMapper modelMapper) {
+    public TicketController(TicketService ticketService, ClientService clientService, EmployeeService employeeService, StatusService statusService, ModelMapper modelMapper, NoteService noteService) {
         this.ticketService = ticketService;
         this.clientService = clientService;
         this.employeeService = employeeService;
         this.statusService = statusService;
         this.modelMapper = modelMapper;
+        this.noteService = noteService;
     }
 
     @InitBinder
@@ -85,19 +78,22 @@ public class TicketController {
         Optional<Ticket> ticket = ticketService.findById(id);
         if (ticket.isEmpty())
             return "redirect:/tickets";
-
+        boolean readOnly = isReadOnly(authentication, ticket.get());
         TicketDTO ticketDTO = modelMapper.map(ticket.get(), TicketDTO.class);
+        ticketDTO.setReadOnly(readOnly);
         model.addAttribute("ticket", ticketDTO);
+        model.addAttribute("notes", noteService.getByTicketId(id));
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("employees", employeeService.findAll());
         model.addAttribute("statuses", statusService.findAll());
         return "ticket-form";
     }
-//
-//    @GetMapping("delete")
-//    public String deleteClient(@RequestParam("employeeId") int id){
-//        employeeService.delete(id);
-//        return "redirect:/employees";
-//    }
+
+    private boolean isReadOnly(Authentication authentication, Ticket ticket) {
+        String ownerUserName = ticket.getOwner().getAuthenticationData().getUserName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals(UserRole.ROLE_ADMIN.name()));
+        return !authentication.getName().equals(ownerUserName) && !isAdmin;
+    }
 
 }
