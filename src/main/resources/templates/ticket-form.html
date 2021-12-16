@@ -11,82 +11,108 @@
 <div th:insert="navbar :: navbar">  </div>
 <div style=" display: flex;
     justify-content: center">
-<div style="width: 35%; margin-top: 10px">
-<form th:action="@{/tickets/create}"
-      th:object="${ticket}" method="POST" style="margin-left: 20px">
-    <fieldset th:disabled="${ticket.readOnly}">
-    <input type="hidden" th:field="*{id}"/>
-    <div class="mb-3">
-    <label for="title" class="form-label">Тема</label>
-    <input type="text" th:field="*{title}" class="form-control" id="title" maxlength="32"/>
+    <div style="width: 35%; margin-top: 10px">
+        <form th:action="@{/tickets/create}"
+              th:object="${ticket}" method="POST" style="margin-left: 20px">
+            <fieldset>
+                <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{creator}"/>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Тема</label>
+                    <input type="text" th:field="*{title}" class="form-control" id="title" maxlength="32" th:readonly="${ticket.readOnly}"/>
+                </div>
+                <div th:if="${#fields.hasErrors('title')}"
+                     style="margin-bottom: 25px" class="text-danger">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('title')}" th:text="${err}" />
+                    </ul>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание</label>
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="6" th:readonly="${ticket.readOnly}"></textarea>
+                </div>
+                <fieldset>
+                    <div style="display: flex; justify-content: space-between">
+                        <div th:if="${ticket.id != null}">
+                            <div th:each="client : ${clients}">
+                                <input type="hidden" th:field="*{client}"/>
+                                <div th:if="${client.id == ticket.client}">
+                                    <label for="client_ro" class="form-label">Клиент</label>
+                                    <input type="text" class="form-control" id="client_ro"
+                                           th:value="${client.shortName}" th:size="${client.shortName.length()}" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${ticket.id != null}" class="mb-3">
+                            <label for="client" class="form-label">Клиент</label>
+                            <select class="form-select" th:field="*{client}" id="client"
+                                    th:readonly="${ticket.readOnly || !ticket.lastUpdate}">
+                                <option value="0">Выберите клиента</option>
+                                <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.shortName}"></option>
+                            </select>
+                        </div>
+                        <div th:each="employee : ${employees}">
+                            <div th:if="${employee.id == ticket.creator}">
+                                <label for="creator" class="form-label">Создатель</label>
+                                <input type="text" class="form-control" id="creator" th:value="${employee.fullName}"
+                                       th:size="${employee.fullName.length()}" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${#fields.hasErrors('client')}"
+                         style="margin-bottom: 25px" class="text-danger">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('client')}" th:text="${err}" />
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        <label for="owner" class="form-label">Владелец</label>
+                        <select class="form-select" th:field="*{owner}"  id="owner" style="width: auto"
+                                th:readonly="${ticket.readOnly || !ticket.lastUpdate}">
+                            <option value="0">Выберите владельца</option>
+                            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.fullName}"></option>
+                        </select>
+                    </div>
+                    <div th:if="${#fields.hasErrors('owner')}"
+                         style="margin-bottom: 25px" class="text-danger" >
+                        <ul>
+                            <li th:each="err : ${#fields.errors('owner')}" th:text="${err}" />
+                        </ul>
+                    </div>
+                    <div th:each="status : ${statuses}" style="display: inline-block">
+                        <input type="radio" th:field="*{status}" th:value="${status.id}"
+                               th:id="${status.status}" class="btn-check"
+                               th:readonly="${ticket.readOnly || !ticket.lastUpdate}">
+                        <label class="btn btn-outline-secondary" th:for="${status.status}" th:text="${status.status}">dsadsad</label>
+                    </div>
+                </fieldset>
+                <div style="margin-top: 10px">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </fieldset>
+        </form>
     </div>
-    <div th:if="${#fields.hasErrors('title')}"
-         style="margin-bottom: 25px" class="text-danger">
-        <ul>
-            <li th:each="err : ${#fields.errors('title')}" th:text="${err}" />
-        </ul>
+    <div style="width: 65%">
+        <table class="table table-striped table-hover table-bordered" style="text-align: center; margin: 20px; width: 97%">
+            <tr class="table-primary ">
+                <th>Id</th>
+                <th>Комментарий</th>
+                <th>Создатель</th>
+                <th>Владелец</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+            <tr th:each ="note : ${notes}">
+                <td th:utext="${note.id}">...</td>
+                <td th:utext="${note.comment}">...</td>
+                <td th:utext="${note.creator.fullName}">...</td>
+                <td th:utext="${note.owner.fullName}">...</td>
+                <td th:utext="${note.status.status}">...</td>
+                <td><a th:href="@{/notes/update(noteId=${note.id})}" class="btn btn-outline-info">Редактировать</a></td>
+            </tr>
+        </table>
+        <a th:href="@{/notes/create(ticketId=${ticket.id})}" class="btn btn-primary" style="margin-left: 20px">Добавить</a>
     </div>
-    <div class="mb-3">
-        <label for="description" class="form-label">Описание</label>
-        <textarea class="form-control" id="description" th:field="*{description}" rows="6" ></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="client" class="form-label">Клиент</label>
-        <select class="form-select" th:field="*{client}"  id="client" style="width: auto">
-            <option value="0">Выберите клиента</option>
-            <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.shortName}"></option>
-        </select>
-    </div>
-    <div th:if="${#fields.hasErrors('client')}"
-         style="margin-bottom: 25px" class="text-danger">
-        <ul>
-            <li th:each="err : ${#fields.errors('client')}" th:text="${err}" />
-        </ul>
-    </div>
-    <div class="mb-3">
-        <label for="owner" class="form-label">Владелец</label>
-        <select class="form-select" th:field="*{owner}"  id="owner" style="width: auto">
-            <option value="0">Выберите владельца</option>
-            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.fullName}"></option>
-        </select>
-    </div>
-    <div th:if="${#fields.hasErrors('owner')}"
-         style="margin-bottom: 25px" class="text-danger">
-        <ul>
-            <li th:each="err : ${#fields.errors('owner')}" th:text="${err}" />
-        </ul>
-    </div>
-    <div th:each="status : ${statuses}" style="display: inline-block">
-        <input type="radio" th:field="*{status}" th:value="${status.id}" th:id="${status.status}" class="btn-check">
-         <label class="btn btn-outline-secondary" th:for="${status.status}" th:text="${status.status}">dsadsad</label>
-    </div>
-    <div style="margin-top: 10px">
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    </div>
-    </fieldset>
-</form>
-</div>
-<div style="width: 65%">
-    <table class="table table-striped table-hover table-bordered" style="text-align: center; margin: 20px; width: 97%">
-        <tr class="table-primary ">
-            <th>Id</th>
-            <th>Комментарий</th>
-            <th>Создатель</th>
-            <th>Владелец</th>
-            <th>Статус</th>
-            <th>Действия</th>
-        </tr>
-        <tr th:each ="note : ${notes}">
-            <td th:utext="${note.id}">...</td>
-            <td th:utext="${note.comment}">...</td>
-            <td th:utext="${note.creator.fullName}">...</td>
-            <td th:utext="${note.owner.fullName}">...</td>
-            <td th:utext="${note.status.status}">...</td>
-            <td><a th:href="@{/notes/update(noteId=${note.id})}" class="btn btn-outline-info">Редактировать</a></td>
-        </tr>
-    </table>
-    <a th:href="@{/notes/create}" class="btn btn-primary" style="margin-left: 20px">Добавить</a>
-</div>
 </div>
 </body>
 </html>

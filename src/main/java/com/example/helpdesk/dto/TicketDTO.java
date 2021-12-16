@@ -23,4 +23,5 @@ public class TicketDTO {
     @Min(1)
     private Integer status = 1;
     private boolean readOnly;
+    private boolean isLastUpdate = true;
 }

@@ -4,4 +4,7 @@ import com.example.helpdesk.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeDao extends JpaRepository<Employee, Integer> {
+
+    Employee findByAuthenticationData_UserName(String userName);
+
 }

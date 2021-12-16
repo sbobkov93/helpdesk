@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface NoteDao extends JpaRepository<Note, Integer> {
 
-//    @Query("select n from Note n where n.ticket.id = ?1")
     List<Note> getAllByTicketId(int ticketId);
-
 
 }

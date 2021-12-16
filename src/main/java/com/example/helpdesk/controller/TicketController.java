@@ -1,5 +1,6 @@
 package com.example.helpdesk.controller;
 
+import com.example.helpdesk.service.DtoUtils;
 import com.example.helpdesk.dto.TicketDTO;
 import com.example.helpdesk.entity.*;
 import com.example.helpdesk.service.*;
@@ -24,17 +25,16 @@ public class TicketController {
     private ClientService clientService;
     private EmployeeService employeeService;
     private StatusService statusService;
-    private ModelMapper modelMapper;
-    private NoteService noteService;
+    private DtoUtils dtoUtils;
 
     @Autowired
-    public TicketController(TicketService ticketService, ClientService clientService, EmployeeService employeeService, StatusService statusService, ModelMapper modelMapper, NoteService noteService) {
+    public TicketController(TicketService ticketService, ClientService clientService,
+                            EmployeeService employeeService, StatusService statusService, ModelMapper modelMapper, DtoUtils dtoUtils) {
         this.ticketService = ticketService;
         this.clientService = clientService;
         this.employeeService = employeeService;
         this.statusService = statusService;
-        this.modelMapper = modelMapper;
-        this.noteService = noteService;
+        this.dtoUtils = dtoUtils;
     }
 
     @InitBinder
@@ -59,41 +59,40 @@ public class TicketController {
     }
 
     @PostMapping("create")
-    public String processForm(@Valid @ModelAttribute("ticket") TicketDTO ticketDTO, BindingResult bindingResult, Model model){
+    public String processForm(@Valid @ModelAttribute("ticket") TicketDTO ticketDTO,
+                              BindingResult bindingResult,
+                              Model model,
+                              Authentication authentication){
         if (bindingResult.hasErrors()) {
             model.addAttribute("clients", clientService.findAll());
             model.addAttribute("employees", employeeService.findAll());
             model.addAttribute("statuses", statusService.findAll());
             return "ticket-form";
         }
-        ticketDTO.setCreator(1); //TODO
-        Ticket ticket = modelMapper.map(ticketDTO, Ticket.class);
+        String creatorUserName = authentication.getName();
+        Employee creator = employeeService.findByAuthenticationDataUserName(creatorUserName);
+        Ticket ticket = dtoUtils.getTicket(ticketDTO, creator);
         ticketService.save(ticket);
         return "redirect:/tickets";
     }
 
 
+
     @GetMapping("update")
     public String showFormForUpdate(@RequestParam("ticketId") int id, Model model, Authentication authentication){
-        Optional<Ticket> ticket = ticketService.findById(id);
-        if (ticket.isEmpty())
+        Optional<Ticket> optionalTicket = ticketService.findByIdWithNotes(id);
+        if (optionalTicket.isEmpty())
             return "redirect:/tickets";
-        boolean readOnly = isReadOnly(authentication, ticket.get());
-        TicketDTO ticketDTO = modelMapper.map(ticket.get(), TicketDTO.class);
-        ticketDTO.setReadOnly(readOnly);
+        Ticket ticket = optionalTicket.get();
+        TicketDTO ticketDTO = dtoUtils.getTicketDTO(authentication, ticket);
         model.addAttribute("ticket", ticketDTO);
-        model.addAttribute("notes", noteService.getByTicketId(id));
+        model.addAttribute("notes", ticket.getNotes());
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("employees", employeeService.findAll());
         model.addAttribute("statuses", statusService.findAll());
         return "ticket-form";
     }
 
-    private boolean isReadOnly(Authentication authentication, Ticket ticket) {
-        String ownerUserName = ticket.getOwner().getAuthenticationData().getUserName();
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals(UserRole.ROLE_ADMIN.name()));
-        return !authentication.getName().equals(ownerUserName) && !isAdmin;
-    }
+
 
 }

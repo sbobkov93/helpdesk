@@ -1,9 +1,8 @@
 package com.example.helpdesk.service;
 
 import com.example.helpdesk.entity.Ticket;
-import com.example.helpdesk.repository.TicketDao;
+import com.example.helpdesk.repository.TicketRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -12,20 +11,20 @@ import java.util.Optional;
 @Service
 public class TicketServiceImpl implements TicketService{
 
-    private TicketDao ticketDao;
+    private TicketRepository ticketRepository;
 
-    public TicketServiceImpl(TicketDao ticketDao) {
-        this.ticketDao = ticketDao;
+    public TicketServiceImpl(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
     }
 
     @Override
     public List<Ticket> findAll() {
-        return ticketDao.findAll();
+        return ticketRepository.findAll();
     }
 
     @Override
     public Optional<Ticket> findById(Integer ticketId) {
-        return ticketDao.findById(ticketId);
+        return ticketRepository.findById(ticketId);
     }
 
     @Override
@@ -33,11 +32,16 @@ public class TicketServiceImpl implements TicketService{
         Date now = new Date();
         ticket.setCreationTime(now);
         ticket.setLastModified(now);
-        ticketDao.save(ticket);
+        ticketRepository.save(ticket);
     }
 
     @Override
     public void delete(Integer ticketId) {
-        ticketDao.deleteById(ticketId);
+        ticketRepository.deleteById(ticketId);
+    }
+
+    @Override
+    public Optional<Ticket> findByIdWithNotes(Integer ticketId) {
+        return ticketRepository.findByIdWithNotes(ticketId);
     }
 }

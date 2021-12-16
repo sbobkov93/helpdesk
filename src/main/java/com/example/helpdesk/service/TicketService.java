@@ -1,6 +1,5 @@
 package com.example.helpdesk.service;
 
-import com.example.helpdesk.entity.Employee;
 import com.example.helpdesk.entity.Ticket;
 
 import java.util.List;
@@ -15,4 +14,6 @@ public interface TicketService {
     void save (Ticket ticket);
 
     void delete (Integer ticketId);
+
+    Optional<Ticket> findByIdWithNotes(Integer ticketId);
 }

@@ -37,4 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     public void delete(Integer clientId) {
         employeeDao.deleteById(clientId);
     }
+
+    @Override
+    public Employee findByAuthenticationDataUserName(String userName) {
+        return employeeDao.findByAuthenticationData_UserName(userName);
+    }
 }
