@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+</head>
+<div th:fragment="editable">
+    <div style="display: flex; justify-content: space-between">
+        <div class="mb-3">
+            <label for="client" class="form-label">Клиент</label>
+            <select class="form-select" th:field="*{client}" id="client">
+                <option value="0">Выберите клиента</option>
+                <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.shortName}"></option>
+            </select>
+        </div>
+        <div th:each="employee : ${employees}">
+            <div th:if="${employee.id == ticket.creator}">
+                <label for="creator" class="form-label">Создатель</label>
+                <input type="text" class="form-control" id="creator" th:value="${employee.fullName}"
+                       th:size="${employee.fullName.length()}" readonly/>
+            </div>
+        </div>
+    </div>
+    <div th:if="${#fields.hasErrors('client')}"
+         style="margin-bottom: 25px" class="text-danger">
+        <ul>
+            <li th:each="err : ${#fields.errors('client')}" th:text="${err}" />
+        </ul>
+    </div>
+    <div class="mb-3">
+        <label for="owner" class="form-label">Владелец</label>
+        <select class="form-select" th:field="*{owner}"  id="owner" style="width: auto">
+            <option value="0">Выберите владельца</option>
+            <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.fullName}"></option>
+        </select>
+    </div>
+    <div th:if="${#fields.hasErrors('owner')}"
+         style="margin-bottom: 25px" class="text-danger" >
+        <ul>
+            <li th:each="err : ${#fields.errors('owner')}" th:text="${err}" />
+        </ul>
+    </div>
+    <div th:each="status : ${statuses}" style="display: inline-block">
+        <input type="radio" th:field="*{status}" th:value="${status.id}"
+               th:id="${status.status}" class="btn-check">
+        <label class="btn btn-outline-secondary" th:for="${status.status}" th:text="${status.status}">dsadsad</label>
+    </div>
+</div>
+
+<div th:fragment="uneditable">
+    <div th:each="client : ${clients}" class="mb-3">
+        <input type="hidden" th:field="*{client}"/>
+        <div th:if="${client.id == ticket.client}">
+            <div class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <label for="client" class="col-form-label">Клиент</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="client" class="form-control" th:value="${client.shortName}"
+                           th:size="${client.shortName.length()}" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:each="employee : ${employees}" class="mb-3">
+        <div th:if="${employee.id == ticket.creator}">
+            <div class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <label for="creator" class="col-form-label">Создатель</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="creator" class="form-control" th:value="${employee.fullName}"
+                           th:size="${employee.fullName.length()}" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:each="employee : ${employees}" class="mb-3">
+        <div th:if="${employee.id == ticket.owner}">
+            <input type="hidden" th:field="*{owner}"/>
+            <div class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <label for="owner" class="col-form-label">Владелец</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="owner" class="form-control" th:value="${employee.fullName}"
+                           th:size="${employee.fullName.length()}" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:each="status : ${statuses}" class="mb-3">
+        <div th:if="${status.id == ticket.status}">
+            <div class="row g-2 align-items-center">
+                <div class="col-auto">
+                    <label for="status" class="col-form-label">Статус</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="status" class="form-control" th:value="${status.status}"
+                           th:size="${status.status.length()}" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
