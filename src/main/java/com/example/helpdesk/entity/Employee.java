@@ -1,8 +1,13 @@
 package com.example.helpdesk.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "employee")
 public class Employee {
 
@@ -19,54 +24,17 @@ public class Employee {
     @OneToOne
     @JoinColumn(name = "auth_id")
     private AuthenticationData authenticationData;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "details_id")
+    private EmployeeDetails employeeDetails;
 
     @Transient
     private String fullName;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
 
     public String getFullName() {
         if (fullName == null)
             fullName = String.format("%s %s %s", lastName, firstName, patronymic);
         return fullName;
-    }
-
-    public AuthenticationData getAuthenticationData() {
-        return authenticationData;
-    }
-
-    public void setAuthenticationData(AuthenticationData authenticationData) {
-        this.authenticationData = authenticationData;
     }
 
     @Override

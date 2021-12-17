@@ -1,8 +1,13 @@
 package com.example.helpdesk.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "client")
 public class Client {
 
@@ -16,38 +21,6 @@ public class Client {
     private String shortName;
     @Column(name = "name", nullable = false)
     private String name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(Integer prefix) {
-        this.prefix = prefix;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public String toString() {

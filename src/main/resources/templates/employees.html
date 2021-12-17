@@ -21,10 +21,7 @@
             <td th:utext="${employee.firstName}">...</td>
             <td th:utext="${employee.lastName}">...</td>
             <td th:utext="${employee.patronymic}">...</td>
-            <td><a th:href="@{/employees/update(employeeId=${employee.id})}" class="btn btn-outline-info">Изменить</a>
-                <a th:href="@{/employees/delete(employeeId=${employee.id})}"
-                   class="btn btn-outline-danger"
-                onclick="if(!(confirm('Вы уверены, что хотите удалить этого работника?'))) return false">Удалить</a></td>
+            <td><a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/employees/update(employeeId=${employee.id})}" class="btn btn-outline-info">Изменить</a>
         </tr>
     </table>
     <div sec:authorize="hasRole('ROLE_ADMIN')">

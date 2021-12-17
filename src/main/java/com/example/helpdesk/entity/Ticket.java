@@ -1,10 +1,15 @@
 package com.example.helpdesk.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "ticket")
 public class Ticket {
 
@@ -31,89 +36,9 @@ public class Ticket {
     @Column(name = "last_modified", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModified;
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne()
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
-    @OneToMany(mappedBy = "ticket", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ticket")
     private List<Note> notes;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Employee getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Employee creator) {
-        this.creator = creator;
-    }
-
-    public Employee getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Employee owner) {
-        this.owner = owner;
-    }
-
-    public Date getCreationTime() {
-        return creationTime;
-    }
-
-    public void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
-    }
-
-    public Date getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Date lastModifiedDate) {
-        this.lastModified = lastModifiedDate;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
 }

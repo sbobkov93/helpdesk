@@ -1,8 +1,13 @@
 package com.example.helpdesk.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "status")
 public class Status {
 
@@ -12,20 +17,4 @@ public class Status {
     private int id;
     @Column(name = "status", unique = true, nullable = false, length = 32)
     private String status;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
