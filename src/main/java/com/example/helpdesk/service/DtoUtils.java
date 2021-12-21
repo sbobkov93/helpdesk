@@ -34,7 +34,8 @@ public class DtoUtils {
         String creatorUserName = ticket.getCreator().getAuthenticationData().getUserName();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals(UserRole.ROLE_ADMIN.name()));
-        return !authentication.getName().equals(creatorUserName) && !isAdmin;
+        boolean isCreator = authentication.getName().equals(creatorUserName);
+        return !isCreator && !isAdmin;
     }
 
     public Ticket getTicket(TicketDTO ticketDTO, Employee creator) {
@@ -44,17 +45,17 @@ public class DtoUtils {
     }
 
     public NoteDTO getNoteDTO(Authentication authentication, Note note) {
-        String creatorName = authentication.getName();
-        boolean readOnly = isReadOnly(authentication, creatorName, note);
+        boolean readOnly = isReadOnly(authentication, note);
         NoteDTO noteDTO = modelMapper.map(note, NoteDTO.class);
         noteDTO.setReadOnly(readOnly);
         return noteDTO;
     }
 
-    private boolean isReadOnly(Authentication authentication, String creatorName, Note note) {
+    private boolean isReadOnly(Authentication authentication, Note note) {
+        String creatorUserName = note.getCreator().getAuthenticationData().getUserName();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch( a -> a.getAuthority().equals(UserRole.ROLE_ADMIN.name()));
-        boolean isCreator = note.getCreator().getAuthenticationData().getUserName().equals(creatorName);
+        boolean isCreator = authentication.getName().equals(creatorUserName);
         return !isAdmin && !isCreator;
     }
 

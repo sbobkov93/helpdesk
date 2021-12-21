@@ -8,37 +8,46 @@
 </head>
 <body>
 
-<!--
-   In Thymeleaf the equivalent of
-   JSP's ${pageContext.request.contextPath}/edit.html
-   would be @{/edit.html}
-   -->
-
 <form th:action="@{/registration}"
-      th:object="${user}" method="POST" class="form-control" style="width: 250px; margin: auto" >
-    <div class="mb-3">
-        <label for="login" class="form-label">Логин</label>
-        <input type="text" th:field="*{userName}" class="form-control" id="login" style="width: auto" maxlength="5"/>
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Пароль</label>
-    <input type="password" th:field="*{password}" class="form-control" id="password" style="width: auto;" maxlength="16"/>
-    </div>
-    <div class="mb-3">
-        <label for="repeatPassword" class="form-label">Повторите пароль</label>
-        <input type="password" th:field="*{matchingPassword}" class="form-control" id="repeatPassword" style="width: auto;" maxlength="20"/>
-    </div>
-    <div class="mb-3">
+      th:object="${user}" method="POST" class="form-control" style="width: 300px; margin: auto" >
+    <div class="mb-2">
         <label for="firstName" class="form-label">Имя</label>
         <input type="text" th:field="*{firstName}" class="form-control" id="firstName" style="width: auto;"/>
     </div>
-    <div class="mb-3">
+    <div class="mb-2">
         <label for="lastName" class="form-label">Фамилия</label>
         <input type="text" th:field="*{lastName}" class="form-control" id="lastName" style="width: auto;"/>
     </div>
-    <div class="mb-3">
+    <div class="mb-2">
         <label for="patronymic" class="form-label">Отчество</label>
         <input type="text" th:field="*{patronymic}" class="form-control" id="patronymic" style="width: auto;"/>
+    </div>
+    <div class="mb-2">
+        <label for="login" class="form-label">Логин</label>
+        <input type="text" th:field="*{userName}" class="form-control" id="login" style="width: auto"/>
+    </div>
+    <div class="mb-2">
+        <label for="password" class="form-label">Пароль</label>
+    <input type="password" th:field="*{password}" class="form-control" id="password" style="width: auto;"/>
+    </div>
+    <div class="mb-2">
+        <label for="repeatPassword" class="form-label">Повторите пароль</label>
+        <input type="password" th:field="*{matchingPassword}" class="form-control" id="repeatPassword" style="width: auto;" maxlength="20"/>
+    </div>
+    <div class="mb-2">
+        <label for="role" class="form-label">Роль</label>
+        <select class="form-select" th:field="*{role}"  id="role" style="width: auto">
+            <option value="0">Выберите роль</option>
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.role.getLabel()}"></option>
+        </select>
+    </div>
+    <div class="mb-2">
+        <label for="phone" class="form-label">Номер телефона</label>
+        <input type="text" th:field="*{phone}" class="form-control" id="phone" style="width: auto;"/>
+    </div>
+    <div class="mb-2">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" th:field="*{email}" class="form-control" id="email" style="width: auto;"/>
     </div>
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>

@@ -24,4 +24,7 @@ public class UserRegistrationDTO {
     @NotNull
     private String lastName;
     private String patronymic;
+    private String phone;
+    private String email;
+    private Integer role;
 }

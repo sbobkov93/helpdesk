@@ -24,7 +24,7 @@ public class Employee {
     @OneToOne
     @JoinColumn(name = "auth_id")
     private AuthenticationData authenticationData;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "details_id")
     private EmployeeDetails employeeDetails;
 
