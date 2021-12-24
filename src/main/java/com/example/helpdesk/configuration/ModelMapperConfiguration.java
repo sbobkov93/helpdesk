@@ -1,8 +1,8 @@
-package com.example.helpdesk;
+package com.example.helpdesk.configuration;
 
 import com.example.helpdesk.dto.NoteDTO;
 import com.example.helpdesk.dto.TicketDTO;
-import com.example.helpdesk.dto.UserRegistrationDTO;
+import com.example.helpdesk.dto.EmployeeDTO;
 import com.example.helpdesk.entity.*;
 import org.modelmapper.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class ModelMapperConfiguration {
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public ModelMapperConfiguration(PasswordEncoder passwordEncoder) {
@@ -91,6 +91,11 @@ public class ModelMapperConfiguration {
     }
 
     @Bean
+    public Converter<Role, Integer> roleToInt(){
+        return context -> context.getSource().getId();
+    }
+
+    @Bean
     public TypeMapConfigurator DtoToTicket(){
         return modelMapper -> modelMapper.createTypeMap(TicketDTO.class, Ticket.class)
                 .addMappings(mapper -> mapper.using(intToClient()).map(TicketDTO::getClient, Ticket::setClient))
@@ -127,18 +132,40 @@ public class ModelMapperConfiguration {
     }
 
     @Bean
-    public TypeMapConfigurator dtoToUser(){
-        return modelMapper -> modelMapper.createTypeMap(UserRegistrationDTO.class, Employee.class)
-                .addMappings(mapper -> mapper.map(UserRegistrationDTO::getUserName,
+    public TypeMapConfigurator dtoToEmployee(){
+        return modelMapper -> modelMapper.createTypeMap(EmployeeDTO.class, Employee.class)
+                .addMappings(mapper -> mapper.map(EmployeeDTO::getUserName,
                         (dest, v) -> dest.getAuthenticationData().setUserName((String) v)))
-                .addMappings(mapper -> mapper.using(encodePassword()).map(UserRegistrationDTO::getPassword,
+                .addMappings(mapper -> mapper.using(encodePassword()).map(EmployeeDTO::getPassword,
                         (dest, v) -> dest.getAuthenticationData().setPassword((String) v)))
-                .addMappings(mapper -> mapper.using(intToRole()).map(UserRegistrationDTO::getRole,
+                .addMappings(mapper -> mapper.using(intToRole()).map(EmployeeDTO::getRole,
                         (dest, v) -> dest.getAuthenticationData().setRole((Role) v)))
-                .addMappings(mapper -> mapper.map(UserRegistrationDTO::getPhone,
+                .addMappings(mapper -> mapper.map(EmployeeDTO::getPhone,
                         (dest, v) -> dest.getEmployeeDetails().setPhone((String) v)))
-                .addMappings(mapper -> mapper.map(UserRegistrationDTO::getEmail,
-                        (dest, v) -> dest.getEmployeeDetails().setEmail((String) v)));
+                .addMappings(mapper -> mapper.map(EmployeeDTO::getEmail,
+                        (dest, v) -> dest.getEmployeeDetails().setEmail((String) v)))
+                .addMappings(mapper -> mapper.map(EmployeeDTO::getEnabled,
+                        (dest, v) -> dest.getAuthenticationData().setEnabled((Boolean) v)))
+                .addMappings(mapper -> mapper.map(EmployeeDTO::getDetailsId,
+                        (dest, v) -> dest.getEmployeeDetails().setId((Integer) v)))
+                .addMappings(mapper -> mapper.map(EmployeeDTO::getAuthenticationDataId,
+                        (dest, v) -> dest.getAuthenticationData().setId((Integer) v)));
+    }
+
+    @Bean
+    public TypeMapConfigurator EmployeeToDto(){
+        return modelMapper -> modelMapper.createTypeMap(Employee.class, EmployeeDTO.class)
+                .addMappings(mapper -> mapper.map(src -> src.getAuthenticationData().getUserName(),
+                        EmployeeDTO::setUserName))
+                .addMappings(mapper -> mapper.using(roleToInt()).map(src -> src.getAuthenticationData().getRole(),
+                        EmployeeDTO::setRole))
+                .addMappings(mapper -> mapper.map(src -> src.getAuthenticationData().getEnabled(),
+                        EmployeeDTO::setEnabled))
+                .addMappings(mapper -> mapper.map(src -> src.getEmployeeDetails().getEmail(), EmployeeDTO::setEmail))
+                .addMappings(mapper -> mapper.map(src -> src.getEmployeeDetails().getPhone(), EmployeeDTO::setPhone))
+                .addMappings(mapper -> mapper.map(src -> src.getAuthenticationData().getId(),
+                        EmployeeDTO::setAuthenticationDataId))
+                .addMappings(mapper -> mapper.map(src -> src.getEmployeeDetails().getId(), EmployeeDTO::setDetailsId));
     }
 
 }

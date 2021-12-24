@@ -16,4 +16,6 @@ public interface EmployeeService {
     void delete (Integer clientId);
 
     Employee findByAuthenticationDataUserName(String userName);
+
+    Employee findByIdEager(Integer employeeId);
 }

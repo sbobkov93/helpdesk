@@ -14,14 +14,14 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeSequence")
     @SequenceGenerator(name = "employeeSequence", sequenceName = "employee_sequence", allocationSize = 1)
-    private int id;
+    private Integer id;
     @Column(name = "first_name", nullable = false, length = 32)
     private String firstName;
     @Column(name = "last_name", nullable = false, length = 64)
     private String lastName;
     @Column(name = "patronymic", length = 64)
     private String patronymic;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "auth_id")
     private AuthenticationData authenticationData;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -35,6 +35,15 @@ public class Employee {
         if (fullName == null)
             fullName = String.format("%s %s %s", lastName, firstName, patronymic);
         return fullName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Employee))
+            return false;
+        Employee other = (Employee) obj;
+        return id != null && id.equals(other.getId());
     }
 
     @Override

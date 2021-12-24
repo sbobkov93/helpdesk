@@ -44,4 +44,9 @@ public class TicketServiceImpl implements TicketService{
     public Optional<Ticket> findByIdWithNotes(Integer ticketId) {
         return ticketRepository.findByIdWithNotes(ticketId);
     }
+
+    @Override
+    public boolean isExistInDb(Integer ticketId) {
+        return findById(ticketId).isPresent();
+    }
 }

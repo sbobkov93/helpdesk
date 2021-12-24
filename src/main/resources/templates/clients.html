@@ -21,9 +21,6 @@
             <td th:utext="${client.shortName}">...</td>
             <td th:utext="${client.name}">...</td>
             <td><a th:href="@{/clients/update(clientId=${client.id})}" class="btn btn-outline-info">Изменить</a>
-                <a th:href="@{/clients/delete(clientId=${client.id})}"
-                   class="btn btn-outline-danger"
-                onclick="if(!(confirm('Вы уверены, что хотите удалить этого клиента?'))) return false">Удалить</a></td>
         </tr>
     </table>
     <a th:href="@{/clients/form}" class="btn btn-primary" style="margin: 20px">Добавить</a>

@@ -16,4 +16,6 @@ public interface TicketService {
     void delete (Integer ticketId);
 
     Optional<Ticket> findByIdWithNotes(Integer ticketId);
+
+    boolean isExistInDb(Integer ticketId);
 }

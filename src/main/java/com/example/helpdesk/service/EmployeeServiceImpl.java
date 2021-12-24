@@ -42,4 +42,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Employee findByAuthenticationDataUserName(String userName) {
         return employeeDao.findByAuthenticationData_UserName(userName);
     }
+
+    @Override
+    public Employee findByIdEager(Integer employeeId) {
+        return employeeDao.findByIdEager(employeeId);
+    }
 }

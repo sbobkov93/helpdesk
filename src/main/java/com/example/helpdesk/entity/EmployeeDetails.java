@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -15,7 +14,7 @@ public class EmployeeDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeDetailsSequence")
     @SequenceGenerator(name = "employeeDetailsSequence", sequenceName = "employee_details_sequence", allocationSize = 1)
-    private int id;
+    private Integer id;
 
     @Column(name = "phone")
     private String phone;

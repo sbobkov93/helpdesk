@@ -1,4 +1,4 @@
-package com.example.helpdesk;
+package com.example.helpdesk.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +23,4 @@ public class HelpdeskConfiguration {
         configurators.forEach(c -> c.setUp(modelMapper));
         return modelMapper;
     }
-
 }

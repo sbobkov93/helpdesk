@@ -4,14 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "ticket")
-public class Ticket {
+public class Ticket extends HelpdeskRecord{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticketSequence")
@@ -24,21 +23,6 @@ public class Ticket {
     @OneToOne()
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-    @OneToOne()
-    @JoinColumn(name = "creator_id", nullable = false)
-    private Employee creator;
-    @OneToOne()
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Employee owner;
-    @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date creationTime;
-    @Column(name = "last_modified", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModified;
-    @OneToOne()
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
     @OneToMany(mappedBy = "ticket")
     private List<Note> notes;
 }

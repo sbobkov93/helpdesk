@@ -4,13 +4,14 @@ import com.example.helpdesk.service.DtoUtils;
 import com.example.helpdesk.dto.TicketDTO;
 import com.example.helpdesk.entity.*;
 import com.example.helpdesk.service.*;
-import org.modelmapper.ModelMapper;
+import com.example.helpdesk.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,20 +22,22 @@ import java.util.Optional;
 @RequestMapping("/tickets")
 public class TicketController {
 
-    private TicketService ticketService;
-    private ClientService clientService;
-    private EmployeeService employeeService;
-    private StatusService statusService;
-    private DtoUtils dtoUtils;
+    private final TicketService ticketService;
+    private final ClientService clientService;
+    private final EmployeeService employeeService;
+    private final StatusService statusService;
+    private final DtoUtils dtoUtils;
+    private final TicketUpdateValidator ticketUpdateValidator;
 
     @Autowired
     public TicketController(TicketService ticketService, ClientService clientService,
-                            EmployeeService employeeService, StatusService statusService, ModelMapper modelMapper, DtoUtils dtoUtils) {
+                            EmployeeService employeeService, StatusService statusService, DtoUtils dtoUtils, TicketUpdateValidator ticketUpdateValidator) {
         this.ticketService = ticketService;
         this.clientService = clientService;
         this.employeeService = employeeService;
         this.statusService = statusService;
         this.dtoUtils = dtoUtils;
+        this.ticketUpdateValidator = ticketUpdateValidator;
     }
 
     @InitBinder
@@ -50,7 +53,7 @@ public class TicketController {
     }
 
     @GetMapping("create")
-    public String showForm(Model model){
+    public String showFormForCreate(Model model){
         model.addAttribute("ticket", new TicketDTO());
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("employees", employeeService.findAll());
@@ -59,7 +62,7 @@ public class TicketController {
     }
 
     @PostMapping("create")
-    public String processForm(@Valid @ModelAttribute("ticket") TicketDTO ticketDTO,
+    public String create(@Valid @ModelAttribute("ticket") TicketDTO ticketDTO,
                               BindingResult bindingResult,
                               Model model,
                               Authentication authentication){
@@ -76,8 +79,6 @@ public class TicketController {
         return "redirect:/tickets";
     }
 
-
-
     @GetMapping("update")
     public String showFormForUpdate(@RequestParam("ticketId") int id, Model model, Authentication authentication){
         Optional<Ticket> optionalTicket = ticketService.findByIdWithNotes(id);
@@ -91,6 +92,27 @@ public class TicketController {
         model.addAttribute("employees", employeeService.findAll());
         model.addAttribute("statuses", statusService.findAll());
         return "ticket-form";
+    }
+
+    @PostMapping("update")
+    public String update(@Valid @ModelAttribute("ticket") TicketDTO ticketDTO,
+                         BindingResult bindingResult,
+                         Model model,
+                         Authentication authentication){
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clients", clientService.findAll());
+            model.addAttribute("employees", employeeService.findAll());
+            model.addAttribute("statuses", statusService.findAll());
+            return "ticket-form";
+        }
+        ValidationResult result = ticketUpdateValidator.validate(ticketDTO, authentication);
+        if (!result.isValid()){
+            bindingResult.addError(new ObjectError("customValidationError", result.getErrorMessage()));
+
+        }
+
+
+        return "redirect:/tickets";
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.helpdesk;
+package com.example.helpdesk.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

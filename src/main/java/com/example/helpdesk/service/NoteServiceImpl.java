@@ -39,7 +39,7 @@ public class NoteServiceImpl implements NoteService {
     public void save(Note note) {
         Date now = new Date();
         note.setCreationTime(now);
-        note.setLastModifiedTime(now);
+        note.setLastModified(now);
         noteDao.save(note);
         Ticket ticket = ticketRepository.getById(note.getTicket().getId());
         ticket.setStatus(note.getStatus());

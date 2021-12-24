@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "note")
-public class Note {
+public class Note extends HelpdeskRecord{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "noteSequence")
@@ -21,18 +21,5 @@ public class Note {
     private Ticket ticket;
     @Column(name = "comment", nullable = false, length = 1024)
     private String comment;
-    @OneToOne
-    @JoinColumn(name = "creator_id", nullable = false)
-    private Employee creator;
-    @OneToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Employee owner;
-    @Column(name = "created_at", nullable = false)
-    private Date creationTime;
-    @Column(name = "last_modified", nullable = false)
-    private Date lastModifiedTime;
-    @OneToOne
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
 
 }
