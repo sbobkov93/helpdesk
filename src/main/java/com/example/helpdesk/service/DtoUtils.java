@@ -42,6 +42,10 @@ public class DtoUtils {
         return modelMapper.map(ticketDTO, Ticket.class);
     }
 
+    public Ticket getTicket(TicketDTO ticketDTO) {
+        return modelMapper.map(ticketDTO, Ticket.class);
+    }
+
     public NoteDTO getNoteDTO(Authentication authentication, Note note) {
         boolean readOnly = isReadOnly(authentication, note);
         NoteDTO noteDTO = modelMapper.map(note, NoteDTO.class);

@@ -14,13 +14,13 @@
             <th>Префикс</th>
             <th>Краткое наименование</th>
             <th>Полное наименование</th>
-            <th>Изменить/удалить</th>
+<!--            <th>Изменить/удалить</th>-->
         </tr>
         <tr th:each ="client : ${clients}">
             <td th:utext="${client.prefix}">...</td>
             <td th:utext="${client.shortName}">...</td>
             <td th:utext="${client.name}">...</td>
-            <td><a th:href="@{/clients/update(clientId=${client.id})}" class="btn btn-outline-info">Изменить</a>
+<!--            <td><a th:href="@{/clients/update(clientId=${client.id})}" class="btn btn-outline-info">Изменить</a>-->
         </tr>
     </table>
     <a th:href="@{/clients/form}" class="btn btn-primary" style="margin: 20px">Добавить</a>

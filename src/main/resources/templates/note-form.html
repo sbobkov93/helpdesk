@@ -18,6 +18,12 @@
         <label for="comment" class="form-label">Комментарий</label>
         <textarea class="form-control" id="comment" th:field="*{comment}" rows="6" ></textarea>
     </div>
+        <div th:if="${#fields.hasErrors('comment')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('comment')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-3">
         <label for="owner" class="form-label">Владелец</label>
         <select class="form-select" th:field="*{owner}"  id="owner" style="width: auto">

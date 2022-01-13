@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -65,7 +67,12 @@ public class NoteController {
     }
 
     @PostMapping("create")
-    public String create (NoteDTO noteDTO){
+    public String create (@Valid @ModelAttribute("note") NoteDTO noteDTO, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()){
+            model.addAttribute("employees", employeeService.findAll());
+            model.addAttribute("statuses", statusService.findAll());
+            return "note-form";
+        }
         Note note = modelMapper.map(noteDTO, Note.class);
         noteService.save(note);
         return "redirect:/tickets/update?ticketId=" + noteDTO.getTicket();

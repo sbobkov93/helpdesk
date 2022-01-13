@@ -90,6 +90,7 @@
     </div>
     <div th:each="status : ${statuses}" class="mb-3">
         <div th:if="${status.id == ticket.status}">
+            <input type="hidden" th:field="*{status}"/>
             <div class="row g-2 align-items-center">
                 <div class="col-auto">
                     <label for="status" class="col-form-label">Статус</label>

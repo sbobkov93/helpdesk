@@ -5,7 +5,7 @@ import com.example.helpdesk.entity.Employee;
 import com.example.helpdesk.entity.Ticket;
 import com.example.helpdesk.service.EmployeeService;
 import com.example.helpdesk.service.TicketService;
-import com.example.helpdesk.validation.TicketValidator;
+import com.example.helpdesk.validation.TicketUpdateValidator;
 import com.example.helpdesk.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ public class TicketValidatorConfiguration {
 
     @Bean
     @Order(1)
-    public TicketValidator isPresent(){
+    public TicketUpdateValidator isPresent(){
         return (t, a) -> ValidationResult.builder()
                 .isValid(ticketService.isExistInDb(t.getId()))
                 .errorMessage("No ticket with such id: " + t.getId())
@@ -40,7 +40,7 @@ public class TicketValidatorConfiguration {
 
     @Bean
     @Order(2)
-    public TicketValidator isAuthorized(){
+    public TicketUpdateValidator isAuthorized(){
         return (t, a) -> {
             boolean isAdmin = a.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(ROLE_ADMIN.name()));
@@ -56,7 +56,7 @@ public class TicketValidatorConfiguration {
 
     @Bean
     @Order(3)
-    public TicketValidator isClientUnchanged(){
+    public TicketUpdateValidator isClientUnchanged(){
         return (t, a) -> {
             Ticket ticket = getActualTicket(t);
             boolean isUnchanged = t.getClient().equals(ticket.getClient().getId());
@@ -69,7 +69,7 @@ public class TicketValidatorConfiguration {
 
     @Bean
     @Order(4)
-    public TicketValidator isCreatorUnchanged(){
+    public TicketUpdateValidator isCreatorUnchanged(){
         return (t, a) -> {
             Ticket actualTicket = getActualTicket(t);
             boolean isUnchanged = t.getCreator().equals(actualTicket.getCreator().getId());
@@ -82,7 +82,7 @@ public class TicketValidatorConfiguration {
 
     @Bean
     @Order(5)
-    public TicketValidator isStatusValid(){
+    public TicketUpdateValidator isStatusValid(){
         return (t, a) -> {
             Ticket actualTicket = getActualTicket(t);
             boolean isUnchanged = t.getStatus().equals(actualTicket.getStatus().getId());
@@ -96,7 +96,7 @@ public class TicketValidatorConfiguration {
 
     @Bean
     @Order(6)
-    public TicketValidator isOwnerValid(){
+    public TicketUpdateValidator isOwnerValid(){
         return (t, a) -> {
             Ticket actualTicket = getActualTicket(t);
             boolean isUnchanged = t.getOwner().equals(actualTicket.getOwner().getId());
@@ -109,7 +109,7 @@ public class TicketValidatorConfiguration {
     }
 
     private Ticket getActualTicket(TicketDTO t) {
-        Optional<Ticket> optionalTicket = ticketService.findById(t.getId());
+        Optional<Ticket> optionalTicket = ticketService.findByIdWithNotes(t.getId());
         return optionalTicket
                 .orElseThrow(() -> new IllegalArgumentException("No ticket with such id: " + t.getId()));
     }

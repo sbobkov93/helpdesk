@@ -1,10 +1,9 @@
-package com.example.helpdesk.service;
+package com.example.helpdesk.validation;
 
 import com.example.helpdesk.dto.TicketDTO;
-import com.example.helpdesk.validation.ValidationResult;
 import org.springframework.security.core.Authentication;
 
-public interface TicketUpdateValidator {
+public interface TicketUpdateValidatorService {
 
     ValidationResult validate (TicketDTO ticketDTO, Authentication authentication);
 

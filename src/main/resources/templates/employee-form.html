@@ -20,10 +20,22 @@
         <input type="text" th:field="*{firstName}" class="form-control" id="firstName" style="width: auto;"
                th:readonly="*{readOnly}"/>
     </div>
+        <div th:if="${#fields.hasErrors('firstName')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="lastName" class="form-label">Фамилия</label>
         <input type="text" th:field="*{lastName}" class="form-control" id="lastName" style="width: auto;"/>
     </div>
+        <div th:if="${#fields.hasErrors('lastName')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="patronymic" class="form-label">Отчество</label>
         <input type="text" th:field="*{patronymic}" class="form-control" id="patronymic" style="width: auto;"/>
@@ -32,14 +44,32 @@
         <label for="login" class="form-label">Логин</label>
         <input type="text" th:field="*{userName}" class="form-control" id="login" style="width: auto"/>
     </div>
+        <div th:if="${#fields.hasErrors('userName')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('userName')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="password" class="form-label">Пароль</label>
     <input type="password" th:field="*{password}" class="form-control" id="password" style="width: auto;"/>
     </div>
+        <div th:if="${#fields.hasErrors('password')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('password')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="repeatPassword" class="form-label">Повторите пароль</label>
         <input type="password" th:field="*{matchingPassword}" class="form-control" id="repeatPassword" style="width: auto;" maxlength="20"/>
     </div>
+        <div th:if="${#fields.hasErrors('matchingPassword')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="role" class="form-label">Роль</label>
         <select class="form-select" th:field="*{role}"  id="role" style="width: auto">
@@ -47,14 +77,32 @@
             <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.role.getLabel()}"></option>
         </select>
     </div>
+        <div th:if="${#fields.hasErrors('role')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('role')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="phone" class="form-label">Номер телефона</label>
         <input type="text" th:field="*{phone}" class="form-control" id="phone" style="width: auto;"/>
     </div>
+        <div th:if="${#fields.hasErrors('phone')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('phone')}" th:text="${err}" />
+            </ul>
+        </div>
     <div class="mb-2">
         <label for="email" class="form-label">Email</label>
         <input type="text" th:field="*{email}" class="form-control" id="email" style="width: auto;"/>
     </div>
+        <div th:if="${#fields.hasErrors('email')}"
+             style="margin-bottom: 25px" class="text-danger">
+            <ul>
+                <li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
+            </ul>
+        </div>
         <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" th:checked="*{enabled}" id="flexCheckChecked" checked>
             <label class="form-check-label" for="flexCheckChecked">

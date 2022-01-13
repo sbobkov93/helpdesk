@@ -1,8 +1,6 @@
-package com.example.helpdesk.service;
+package com.example.helpdesk.validation;
 
 import com.example.helpdesk.dto.TicketDTO;
-import com.example.helpdesk.validation.TicketValidator;
-import com.example.helpdesk.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -10,12 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TicketUpdateValidatorImpl implements TicketUpdateValidator {
+public class TicketUpdateValidatorServiceImpl implements TicketUpdateValidatorService {
 
-    private final List<TicketValidator> validators;
+    private final List<TicketUpdateValidator> validators;
 
     @Autowired
-    public TicketUpdateValidatorImpl(List<TicketValidator> validators) {
+    public TicketUpdateValidatorServiceImpl(List<TicketUpdateValidator> validators) {
         this.validators = validators;
     }
 

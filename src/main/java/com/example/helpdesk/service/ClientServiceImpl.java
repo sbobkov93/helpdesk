@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService{
 
-    private ClientDao clientDao;
+    private final ClientDao clientDao;
 
     @Autowired
     public ClientServiceImpl(ClientDao clientDao) {
@@ -23,8 +24,8 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public Client getById(Integer clientId) {
-        return clientDao.getById(clientId);
+    public Optional<Client> findById(Integer clientId) {
+        return clientDao.findById(clientId);
     }
 
     @Override
@@ -35,5 +36,20 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public void delete(Integer clientId) {
         clientDao.deleteById(clientId);
+    }
+
+    @Override
+    public Optional<Client> findByPrefix(Integer prefix) {
+        return clientDao.findByPrefix(prefix);
+    }
+
+    @Override
+    public Optional<Client> findByShortName(String shortName) {
+        return clientDao.findByShortName(shortName);
+    }
+
+    @Override
+    public Optional<Client> findByName(String name) {
+        return clientDao.findByName(name);
     }
 }

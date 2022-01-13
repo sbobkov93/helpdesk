@@ -60,7 +60,11 @@
                 <td><a th:href="@{/notes/update(noteId=${note.id})}" class="btn btn-outline-info">Редактировать</a></td>
             </tr>
         </table>
-        <a th:href="@{/notes/create(ticketId=${ticket.id})}" class="btn btn-primary" style="margin-left: 20px">Добавить</a>
+        <div th:if="${ticket.id != null}">
+            <div>
+                <a th:href="@{/notes/create(ticketId=${ticket.id})}" class="btn btn-primary" style="margin-left: 20px">Добавить</a>
+            </div>
+        </div>
     </div>
 </div>
 </body>

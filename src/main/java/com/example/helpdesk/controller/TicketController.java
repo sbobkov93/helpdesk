@@ -4,6 +4,7 @@ import com.example.helpdesk.service.DtoUtils;
 import com.example.helpdesk.dto.TicketDTO;
 import com.example.helpdesk.entity.*;
 import com.example.helpdesk.service.*;
+import com.example.helpdesk.validation.TicketUpdateValidatorService;
 import com.example.helpdesk.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -27,11 +28,11 @@ public class TicketController {
     private final EmployeeService employeeService;
     private final StatusService statusService;
     private final DtoUtils dtoUtils;
-    private final TicketUpdateValidator ticketUpdateValidator;
+    private final TicketUpdateValidatorService ticketUpdateValidator;
 
     @Autowired
     public TicketController(TicketService ticketService, ClientService clientService,
-                            EmployeeService employeeService, StatusService statusService, DtoUtils dtoUtils, TicketUpdateValidator ticketUpdateValidator) {
+                            EmployeeService employeeService, StatusService statusService, DtoUtils dtoUtils, TicketUpdateValidatorService ticketUpdateValidator) {
         this.ticketService = ticketService;
         this.clientService = clientService;
         this.employeeService = employeeService;
@@ -72,6 +73,8 @@ public class TicketController {
             model.addAttribute("statuses", statusService.findAll());
             return "ticket-form";
         }
+        if (ticketDTO.getId() != null)
+            return update(ticketDTO, bindingResult, authentication);
         String creatorUserName = authentication.getName();
         Employee creator = employeeService.findByAuthenticationDataUserName(creatorUserName);
         Ticket ticket = dtoUtils.getTicket(ticketDTO, creator);
@@ -94,27 +97,17 @@ public class TicketController {
         return "ticket-form";
     }
 
-    @PostMapping("update")
-    public String update(@Valid @ModelAttribute("ticket") TicketDTO ticketDTO,
+    public String update(@Valid TicketDTO ticketDTO,
                          BindingResult bindingResult,
-                         Model model,
                          Authentication authentication){
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("clients", clientService.findAll());
-            model.addAttribute("employees", employeeService.findAll());
-            model.addAttribute("statuses", statusService.findAll());
-            return "ticket-form";
-        }
         ValidationResult result = ticketUpdateValidator.validate(ticketDTO, authentication);
         if (!result.isValid()){
             bindingResult.addError(new ObjectError("customValidationError", result.getErrorMessage()));
-
+            return "invalid";
         }
-
-
+        Ticket ticket = dtoUtils.getTicket(ticketDTO);
+        ticketService.save(ticket);
         return "redirect:/tickets";
     }
-
-
 
 }
