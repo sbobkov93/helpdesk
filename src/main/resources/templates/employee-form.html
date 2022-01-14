@@ -109,7 +109,7 @@
                 Активная учётная запись
             </label>
         </div>
-    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <button type="submit" class="btn btn-primary" th:hidden="${employee.id != null}">Сохранить</button>
     </fieldset>
 </form>
 </body>

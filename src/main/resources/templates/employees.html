@@ -14,12 +14,14 @@
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Отчество</th>
+            <th>Действия</th>
         </tr>
         <tr th:each ="employee : ${employees}">
             <td th:utext="${employee.id}">...</td>
             <td th:utext="${employee.firstName}">...</td>
             <td th:utext="${employee.lastName}">...</td>
             <td th:utext="${employee.patronymic}">...</td>
+            <td><a th:href="@{/employees/update(employeeId=${employee.id})}" class="btn btn-outline-info">Просмотр</a>
         </tr>
     </table>
     <div sec:authorize="hasRole('ROLE_ADMIN')">
